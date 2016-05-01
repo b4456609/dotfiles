@@ -6,6 +6,11 @@ curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
 echo "#nodejs"
 sudo apt-get install -y nodejs
 
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo "export PATH=~/.npm-global/bin:$PATH" >> $HOME/.profile
+source ~/.profile
+
 echo "#java8 ppa"
 sudo add-apt-repository -y ppa:webupd8team/java
 
