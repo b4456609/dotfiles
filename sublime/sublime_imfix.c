@@ -1,4 +1,4 @@
-*
+/*
 sublime-imfix.c
 Use LD_PRELOAD to interpose some function to fix sublime input method support for linux.
 By Cjacker Huang <jianzhong.huang at i-soft.com.cn>

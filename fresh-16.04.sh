@@ -1,10 +1,13 @@
 #!/bin/bash
 
+echo "#nodejs"
+curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+
+echo "#nodejs"
+sudo apt-get install -y nodejs
+
 echo "#java8 ppa"
 sudo add-apt-repository -y ppa:webupd8team/java
-
-echo "#ansible ppa"
-sudo apt-add-repository -y ppa:ansible/ansible
 
 echo "#spotify"
 echo "# 1. Add the Spotify repository signing key to be able to verify downloaded packages"
@@ -22,17 +25,13 @@ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /et
 echo "# sublime"
 sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
 
-echo "# Add Virtualbox Repository"
-$ sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list"
-echo "# Import Oracle Public Key"
-$ wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
-
 echo "# Repository update #"
 sudo apt-get update
 sudo apt upgrade -y
 
 echo "#Install Google Chrome"
 sudo apt-get install -y google-chrome-stable
+sudo rm -f /etc/apt/sources.list.d/google.list
 
 echo "# sublime"
 sudo apt-get install -y sublime-text-installer
@@ -41,26 +40,21 @@ echo "# fcitx"
 sudo apt-get install -y fcitx fcitx-chewing
 sudo apt-get install -y build-essential libgtk2.0-dev
 
-echo "# Setting Fcitx as the default input method!"
-im-switch -s fcitx -z default
-
 sudo gcc -shared -o sublime/libsublime-imfix.so sublime/sublime_imfix.c  `pkg-config --libs --cflags gtk+-2.0` -fPIC
 sudo mv sublime/libsublime-imfix.so  /opt/sublime_text
 
 echo "# replace sublime text "
-sudo rm /usr/share/applications/sublime-text.desktop
-sudo cp sublime/sublime-text.desktop /usr/share/applications
+sudo rm /usr/share/applications/sublime_text.desktop
+sudo cp sublime/sublime_text.desktop /usr/share/applications
 
 echo "# replace sublime text bin"
 sudo rm /usr/bin/subl
 sudo cp sublime/subl /usr/bin
+sudo chmod +x /usr/bin/subl
 
 echo "#spotify"
 echo "# 4. Install Spotify"
 sudo apt-get install spotify-client
-
-echo "#nodejs"
-curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
 
 echo "#java8 installer"
 echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
@@ -89,28 +83,16 @@ sudo apt-get install -y git git-cola
 git config --global user.name "Bernie"
 git config --global user.email "b4456609@gmail.com"
 
-echo "#nodejs"
-sudo apt-get install -y nodejs
-
-
-echo "#ansible"
-sudo apt-get install -y ansible
 
 echo "# docker"
 curl -fsSL https://get.docker.com/ | sh
 sudo gpasswd -a ${USER} docker
-
-echo "# Install Media Codecs"
-sudo apt-get install -y ubuntu-restricted-extras
 
 echo "# Install video player"
 sudo apt-get install -y mpv
 
 echo "# Install filezilla"
 sudo apt-get install -y filezilla
-
-echo "# Install VirtualBox"
-sudo apt-get install -y virtualbox-5.0
 
 echo "# dev tool"
 sudo apt-get install -y zsh
@@ -127,6 +109,8 @@ wget "$VAGRANT" -P /tmp
 echo "# Install vagrant"
 sudo dpkg -i "/tmp/$(basename $VAGRANT)"
 
+echo "# Install VirtualBox"
+sudo apt-get install -y virtualbox ansible
 
 echo "# Disable Guest Session on Unity"
 sudo sh -c "echo 'allow-guest=false' >> /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf"
@@ -142,7 +126,7 @@ sudo apt-get -y clean
 echo "# install oh-my-zsh"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-echo "# intellij eclipse robomongo docker-compose"
+echo "# intellij eclipse robomongo docker-compose virtualbox ansible"
 echo "# https://robomongo.org/download"
 echo "# https://docs.docker.com/compose/install/"
 echo "# https://www.jetbrains.com/idea/#chooseYourEdition"
