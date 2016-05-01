@@ -30,6 +30,13 @@ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /et
 echo "# sublime"
 sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
 
+echo "# ansible ppa"
+sudo apt-add-repository -y ppa:ansible/ansible
+
+echo "# Virtualbox"
+sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list.d/virtualbox.list"
+wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+
 echo "# Repository update #"
 sudo apt-get update
 sudo apt upgrade -y
@@ -49,17 +56,20 @@ sudo gcc -shared -o sublime/libsublime-imfix.so sublime/sublime_imfix.c  `pkg-co
 sudo mv sublime/libsublime-imfix.so  /opt/sublime_text
 
 echo "# replace sublime text "
-sudo rm /usr/share/applications/sublime_text.desktop
-sudo cp sublime/sublime_text.desktop /usr/share/applications
+sudo rm /usr/share/applications/sublime-text.desktop
+sudo cp sublime/sublime-text.desktop /usr/share/applications
 
 echo "# replace sublime text bin"
 sudo rm /usr/bin/subl
 sudo cp sublime/subl /usr/bin
 sudo chmod +x /usr/bin/subl
 
+#open terminal at current folder
+sudo apt-get install -y nautilus-open-terminal
+
 echo "#spotify"
 echo "# 4. Install Spotify"
-sudo apt-get install spotify-client
+sudo apt-get install -y spotify-client
 
 echo "#java8 installer"
 echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
@@ -99,6 +109,15 @@ sudo apt-get install -y mpv
 echo "# Install filezilla"
 sudo apt-get install -y filezilla
 
+#File Compressors
+sudo apt-get install -y \
+    rar unrar \
+    zip unzip \
+    p7zip-full p7zip-rar
+
+#virtualbox
+sudo apt-get install -y virtualbox
+
 echo "# dev tool"
 sudo apt-get install -y zsh
 
@@ -117,10 +136,8 @@ sudo dpkg -i "/tmp/$(basename $VAGRANT)"
 echo "# Install VirtualBox"
 sudo apt-get install -y virtualbox ansible
 
-echo "# Disable Guest Session on Unity"
-sudo sh -c "echo 'allow-guest=false' >> /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf"
-echo "# Enable one-click minimize"
-gsettings set org.compiz.unityshell:/org/compiz/profiles/unity/plugins/unityshell/ launcher-minimize-window true
+#Disable “include online search results”
+gsettings set com.canonical.Unity.Lenses remote-content-search 'none'
 
 echo "Cleaning Up" &&
 sudo apt-get -f install &&
