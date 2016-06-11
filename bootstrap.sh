@@ -6,7 +6,7 @@ git pull origin master;
 
 function doIt() {
 	rsync --exclude ".git/" --exclude ".DS_Store" --exclude "bootstrap.sh"  --exclude "sublime/"  --exclude "Ubuntu Mono derivative Powerline.ttf"   --exclude "fresh-14.04.sh"\
-		--exclude "README.md" --exclude "LICENSE-MIT.txt" -avh --no-perms . ~;
+		--exclude "README.md" --exclude "fresh-16.04.sh" --exclude "LICENSE-MIT.txt" -avh --no-perms . ~;
 	source ~/.zshrc;
 }
 
