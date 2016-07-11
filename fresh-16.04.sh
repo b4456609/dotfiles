@@ -1,6 +1,12 @@
 #!/bin/bash
-sudo apt-get install -y curl
 
+ECLIPSE="http://eclipse.stu.edu.tw/technology/epp/downloads/release/neon/R/eclipse-jee-neon-R-linux-gtk-x86_64.tar.gz"
+INTELLIJ="https://download.jetbrains.com/idea/ideaIC-2016.1.3.tar.gz"
+SIMPLENOTE="https://github.com/Automattic/simplenote-electron/releases/download/v1.0.2/simplenote-1.0.2.deb"
+VAGRANT="https://releases.hashicorp.com/vagrant/1.8.4/vagrant_1.8.4_x86_64.deb"
+#Gradle
+MAIN=2
+VERSION=13
 echo "#nodejs"
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
@@ -29,17 +35,11 @@ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /et
 echo "# ansible ppa"
 sudo apt-add-repository -y ppa:ansible/ansible
 
-#echo "# Virtualbox"
-sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib' >> /etc/apt/sources.list.d/virtualbox.list"
-wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-
 sudo add-apt-repository ppa:webupd8team/atom -y
 
 echo "# Repository update #"
 sudo apt-get update
 sudo apt upgrade -y
-
 
 sudo apt-get install -y atom
 
@@ -56,10 +56,15 @@ echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-
 echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
 sudo apt-get install -y oracle-java8-installer
 echo "export JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> $HOME/.profile
+source ~/.profile
+
+echo "#GIT"
+sudo apt-get install -y git
+
+git config --global user.name "Bernie"
+git config --global user.email "b4456609@gmail.com"
 
 echo "#gradle"
-MAIN=2
-VERSION=13
 wget https://services.gradle.org/distributions/gradle-$MAIN.$VERSION-bin.zip
 sudo unzip -d /opt ./gradle-$MAIN.$VERSION-bin.zip
 rm ./gradle*.zip
@@ -70,14 +75,6 @@ echo 'export PATH=$PATH:$GRADLE_HOME/bin' >> $HOME/.profile
 echo "org.gradle.daemon=true" >> $HOME/.gradle/gradle.properties
 
 source ~/.profile
-
-
-echo "#GIT"
-sudo apt-get install -y git
-
-git config --global user.name "Bernie"
-git config --global user.email "b4456609@gmail.com"
-
 
 echo "# docker"
 curl -fsSL https://get.docker.com/ | sh
@@ -93,7 +90,7 @@ sudo apt-get install -y filezilla
 sudo apt-get install -y p7zip-rar p7zip-full unace unrar zip unzip sharutils rar uudeview mpack arj cabextract file-roller
 
 #virtualbox
-sudo apt-get install -y virtualbox-5.0
+sudo apt-get install -y virtualbox
 
 echo "# dev tool"
 sudo apt-get install -y zsh
@@ -104,7 +101,6 @@ sudo apt-get install -y bleachbit
 echo "# vagrant "
 echo "# Dependencies"
 sudo apt-get install libqt4-opengl -y
-VAGRANT="https://releases.hashicorp.com/vagrant/1.8.4/vagrant_1.8.4_x86_64.deb"
 echo "# Download vagrant"
 wget "$VAGRANT" -P /tmp
 echo "# Install vagrant"
@@ -112,6 +108,21 @@ sudo dpkg -i "/tmp/$(basename $VAGRANT)"
 
 echo "# Install VirtualBox"
 sudo apt-get install -y ansible
+
+echo "#simplenote"
+echo "# Download simplenote"
+wget "$SIMPLENOTE" -P /tmp
+echo "# Install simplenote"
+sudo dpkg -i "/tmp/$(basename $SIMPLENOTE)"
+
+mkdir ~/pf
+
+echo "ide"
+wget "$INTELLIJ" -P ~
+tar -C ~/pf -zxvf $(basename $INTELLIJ)
+
+wget "$ECLIPSE" -P ~
+tar -C ~/pf -zxvf $(basename $ECLIPSE)
 
 echo "Cleaning Up" &&
 sudo apt-get -f install &&
@@ -121,16 +132,4 @@ sudo apt-get -y clean
 
 echo "# install oh-my-zsh"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-echo "# intellij eclipse robomongo docker-compose virtualbox ansible"
-echo "# https://robomongo.org/download"
-echo "# https://docs.docker.com/compose/install/"
-echo "# https://www.jetbrains.com/idea/#chooseYourEdition"
-echo "# http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars2"
-echo "# http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/mars/2/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz&r=1"
-
-echo "# sublime"
-echo "# https://packagecontrol.io/installation"
-echo "# sync settings"
-echo "# https://gist.github.com/b4456609/f7742fe74eb8308be29d"
 
